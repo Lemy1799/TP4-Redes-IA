@@ -1,6 +1,7 @@
 import { GoogleGenerativeAI } from "@google/generative-ai";
 import express from "express";
 import dotenv from "dotenv";
+import jwt from 'jsonwebtoken';
 
 dotenv.config();
 
@@ -11,6 +12,19 @@ const clave = process.env.GEMINI_API_KEY;
 const genAI = new GoogleGenerativeAI(clave);
 
 app.use(express.json());
+
+const authenticateJWT = (req, res, next) => {
+  const token = req.headers.authorization?.split(' ')[1];
+  if (!token) return res.sendStatus(403); // Forbidden
+
+  jwt.verify(token, process.env.JWT_SECRET, (err, user) => {
+    if (err) return res.sendStatus(403);
+    req.user = user;
+    next();
+  });
+};
+
+app.use(authenticateJWT);
 
 app.post("/queryAI", async (req, res) => {
   try {

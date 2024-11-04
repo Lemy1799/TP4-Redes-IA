@@ -1,10 +1,24 @@
 import express from 'express';
 import dotenv from 'dotenv';
 import axios from 'axios';
+import jwt from 'jsonwebtoken';
 
 dotenv.config();
 const app = express();
 app.use(express.json());
+
+const authenticateJWT = (req, res, next) => {
+  const token = req.headers.authorization?.split(' ')[1];
+  if (!token) return res.sendStatus(403); // Forbidden
+
+  jwt.verify(token, process.env.JWT_SECRET, (err, user) => {
+    if (err) return res.sendStatus(403);
+    req.user = user;
+    next();
+  });
+};
+
+app.use(authenticateJWT);
 
 app.post('/getPlaceID', (req, res) => {
     try {

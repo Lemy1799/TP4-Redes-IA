@@ -7,6 +7,7 @@ dotenv.config();
 const app = express();
 app.use(express.json());
 
+// Middleware JWT
 const authenticateJWT = (req, res, next) => {
   const token = req.headers.authorization?.split(' ')[1];
   if (!token) return res.sendStatus(403); // Forbidden

@@ -7,6 +7,7 @@ dotenv.config();
 const app = express();
 app.use(express.json());
 
+// Middleware JWT
 const authenticateJWT = (req, res, next) => {
   const token = req.headers.authorization?.split(' ')[1];
   if (!token) return res.sendStatus(403); // Forbidden
@@ -39,6 +40,7 @@ app.post('/getPlaceReviews', authenticateJWT, async (req, res) => {
       }
     );
 
+    //LIMPIAMOS LA RESPUESTA
     const filteredReviews = (response.data.result.reviews || []).map(review => ({
         author_name: review.author_name,
         rating: review.rating,

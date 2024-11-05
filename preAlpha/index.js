@@ -1,3 +1,8 @@
+/* 
+  ATENCION, ESTE CODIGO FUE DESCARTADO,
+  SOLO ES EL FRONT QUE NO LLEGUÉ A IMPLEMENTAR
+*/
+
 import express from 'express';
 import dotenv from 'dotenv';
 
